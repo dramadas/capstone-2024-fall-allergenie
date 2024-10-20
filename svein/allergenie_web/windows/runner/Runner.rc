@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "allergenie_web" "\0"
+            VALUE "FileDescription", "datasci_barcode_scanning" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "allergenie_web" "\0"
+            VALUE "InternalName", "datasci_barcode_scanning" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "allergenie_web.exe" "\0"
-            VALUE "ProductName", "allergenie_web" "\0"
+            VALUE "OriginalFilename", "datasci_barcode_scanning.exe" "\0"
+            VALUE "ProductName", "datasci_barcode_scanning" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
