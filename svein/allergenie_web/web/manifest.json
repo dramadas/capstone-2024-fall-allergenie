@@ -1,6 +1,6 @@
 {
-    "name": "allergenie_web",
-    "short_name": "allergenie_web",
+    "name": "datasci_barcode_scanning",
+    "short_name": "datasci_barcode_scanning",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
