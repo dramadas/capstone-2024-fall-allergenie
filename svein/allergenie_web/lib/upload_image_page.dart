@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:html' as html;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart'; //remove later
 import 'api_service.dart';
 import 'result_page.dart'; 
 
@@ -87,37 +88,115 @@ class _UploadImagePageState extends State<UploadImagePage> {
     }
   }
 
-  void uploadImage(Uint8List imageData) async {
-    try {
-      final response = await http.post(
-        Uri.parse('${apiService.baseUrl}/upload'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'image': base64Encode(imageData),
-          'allergens': selectedAllergens, // Include selected allergens
-        }),
-      );
+  // void uploadImage(Uint8List imageData) async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('${apiService.baseUrl}/upload'),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: json.encode({
+  //         'image': base64Encode(imageData),
+  //         'allergens': selectedAllergens, // Include selected allergens
+  //       }),
+  //     );
+  //     // Check response status
+  //     print("Response body: ${response.body}");
+  //     if (response.statusCode == 200) {
+  //       final responseData = json.decode(response.body);
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => ResultPage(
+  //             safetyStatus: responseData['safety_status'],
+  //             output: responseData['output'],
+  //           ),
+  //         ),
+  //       );
+  //     } else {
+  //       throw Exception('Failed to upload image: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     print('Error uploading image: $e');
+  //   }
+  // }
+//------------------------------------------------------------------------
+// void uploadImage(Uint8List imageData) async {
+//   try {
+//     var request = http.MultipartRequest(
+//       'POST', 
+//       Uri.parse('${apiService.baseUrl}/upload')
+//     );
 
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResultPage(
-              safetyStatus: responseData['safety_status'],
-              output: responseData['output'],
-            ),
+//     request.files.add(http.MultipartFile.fromBytes(
+//       'file', 
+//       imageData, 
+//       filename: 'image.png', 
+//       contentType: MediaType('image', 'png'),
+//     ));
+
+//     request.fields['allergens'] = selectedAllergens.join(',');
+
+//     var response = await request.send();
+
+//     if (response.statusCode == 200) {
+//       final responseData = await http.Response.fromStream(response);
+//       print("Response body: ${responseData.body}");
+//       // Handle successful response
+//     } else {
+//       print("Failed to upload image: ${response.statusCode}");
+//     }
+//   } catch (e) {
+//     print('Error uploading image: $e');
+//   }
+// }
+// ---------------------------------------------------------------------------
+
+void uploadImage(Uint8List imageData) async {
+  try {
+    // Create multipart request
+    var request = http.MultipartRequest(
+      'POST', 
+      Uri.parse('${apiService.baseUrl}/upload')
+    );
+
+    // Add the image file to the request
+    request.files.add(http.MultipartFile.fromBytes(
+      'file', 
+      imageData, 
+      filename: 'image.png', 
+      contentType: MediaType('image', 'png'),
+    ));
+
+    // Add the selected allergens as a comma-separated string
+    request.fields['allergens'] = selectedAllergens.join(',');
+
+    // Send the request
+    var streamedResponse = await request.send();
+
+    // Convert StreamedResponse to a regular Response
+    var response = await http.Response.fromStream(streamedResponse);
+
+    // Check response status and parse the response body
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultPage(
+            safetyStatus: responseData['safety_status'],
+            output: responseData['output'],
           ),
-        );
-      } else {
-        throw Exception('Failed to upload image: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error uploading image: $e');
+        ),
+      );
+    } else {
+      print("Failed to upload image. Status code: ${response.statusCode}");
     }
+  } catch (e) {
+    print('Error uploading image: $e');
   }
+}
+
 
   // Toggle selected allergens
   void toggleAllergen(String allergen) {
