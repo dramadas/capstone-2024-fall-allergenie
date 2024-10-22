@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
+from flask_cors import CORS
 from PIL import Image
 from pyzbar.pyzbar import decode
 import os
@@ -6,17 +7,22 @@ import pandas as pd
 from tabulate import tabulate
 
 app = Flask(__name__)
+CORS(app) ## ADDED THIS> REMOVE IF MAKES WORSE LOL
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
 # Folder for image uploads
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Load OpenFoodFacts local data
-df_us = pd.read_excel('C:/Users/gonza/Documents/GitHub/MIDS/W210_Capstone/capstone-2024-fall-allergenie/svein/Barcode_Flask/DATASCI210_barcode_scanning/openfoodfacts_us.xlsx')
+df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx')
+# df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
+
 df_us['code'] = df_us['code'].apply(lambda x: '{:.0f}'.format(x))
 
 def is_safe_to_consume(matched_products, selected_allergens):
     unsafe_allergens = []
+    if selected_allergens == ['']:
+        return "No Allergens Selected. Product is Safe to Consume."
     
     for allergen in selected_allergens:
         # Check if the allergen is present in the matched products
@@ -64,19 +70,29 @@ def upload_file():
 
                 # Get user inputs for allergen selection
                 selected_allergens = request.form.getlist('allergens')
-                print(f"Selected Allergens: {selected_allergens}")
+                # selected_allergens = request.form.getlist('allergens[]')
+                print ("Selected Allergens",selected_allergens)
+                print("Type",type(selected_allergens))
+                print (selected_allergens[0])
+                selected_allergens = selected_allergens[0].split(',')
+                print(selected_allergens)
+                # print(f"Selected Allergens: {selected_allergens}")
 
                 # Check if users can consume the product
                 safety_status = is_safe_to_consume(matched_products, selected_allergens)
                 print(safety_status)
 
-                return render_template('result.html', output=output.to_dict(orient='records'), safety_status=safety_status)
+                # return  ('result.html', output=output.to_dict(orient='records'), safety_status=safety_status)
+                return jsonify ({'output': output.to_dict(orient='records'), 'safety_status':safety_status}),200
             else:
                 print("No matching product found.")
-                return render_template('result.html', output=[], safety_status="No matching product found.")
+                return jsonify ({'output': [], 'safety_status':"No matching product found."}),200
+                # return render_template('result.html', output=[], safety_status="No matching product found.")
         else:
             print("No barcodes detected in the image.")
+            return jsonify ({'output': [], 'safety_status':"No matching product found."}),200
             return render_template('result.html', output=[], safety_status="No barcodes detected in the image.")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
