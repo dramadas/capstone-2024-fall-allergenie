@@ -14,8 +14,8 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Load OpenFoodFacts local data
-df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx')
-# df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
+# df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx') ## USE THIS FOR LOCAL TESTING
+df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
 
 df_us['code'] = df_us['code'].apply(lambda x: '{:.0f}'.format(x))
 
@@ -94,5 +94,7 @@ def upload_file():
             return render_template('result.html', output=[], safety_status="No barcodes detected in the image.")
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
