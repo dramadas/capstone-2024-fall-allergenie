@@ -16,7 +16,8 @@ class UploadImagePage extends StatefulWidget {
 
 class _UploadImagePageState extends State<UploadImagePage> {
   Uint8List? imageData;
-  final ApiService apiService = ApiService('http://127.0.0.1:5000'); // Set your base API URL
+  final ApiService apiService = ApiService('http://100.29.58.53:5000'); // Set your base API URL
+  // final ApiService apiService = ApiService('http://127.0.0.1:5000'); // Set your base API URL & USE THIS FOR LOCAL TESTING
 
   // List of allergens
   List<String> allergens = [
