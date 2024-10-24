@@ -57,7 +57,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
 
   // Step 2: Image Upload
   // void pickImage() {
-  void pickImage(ImageSource source){
+  void pickImage(ImageSource source) async {
     if (kIsWeb) {
       html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
       uploadInput.accept = 'image/*';
@@ -78,82 +78,41 @@ class _UploadImagePageState extends State<UploadImagePage> {
       });
     } else {
       final picker = ImagePicker();
-      // picker.pickImage(source: ImageSource.gallery).then((pickedFile) {
-      picker.pickImage(source: source).then((pickedFile) { // remove if it doesnt work
-        setState(() {
-          if (pickedFile != null) {
-            pickedFile.readAsBytes().then((bytes) {
-              imageData = bytes;
-            });
-          }
-        });
-      });
+      try {
+        final pickedFile = await picker.pickImage(source: source);
+
+        if (pickedFile != null) {
+          // Read the bytes of the image
+          final bytes = await pickedFile.readAsBytes();
+
+          // Update the image data state
+          setState(() {
+            imageData = bytes;
+          });
+
+          // Optionally, upload the image immediately after picking
+          uploadImage(imageData!);
+        } else {
+          print('No image selected.');
+        }
+      } catch (e) {
+        print('Error picking image: $e');
+      }
     }
   }
-
-  // void uploadImage(Uint8List imageData) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('${apiService.baseUrl}/upload'),
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: json.encode({
-  //         'image': base64Encode(imageData),
-  //         'allergens': selectedAllergens, // Include selected allergens
-  //       }),
-  //     );
-  //     // Check response status
-  //     print("Response body: ${response.body}");
-  //     if (response.statusCode == 200) {
-  //       final responseData = json.decode(response.body);
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => ResultPage(
-  //             safetyStatus: responseData['safety_status'],
-  //             output: responseData['output'],
-  //           ),
-  //         ),
-  //       );
-  //     } else {
-  //       throw Exception('Failed to upload image: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error uploading image: $e');
+  //     final picker = ImagePicker();
+  //     // picker.pickImage(source: ImageSource.gallery).then((pickedFile) {
+  //     picker.pickImage(source: source).then((pickedFile) { // remove if it doesnt work
+  //       setState(() {
+  //         if (pickedFile != null) {
+  //           pickedFile.readAsBytes().then((bytes) {
+  //             imageData = bytes;
+  //           });
+  //         }
+  //       });
+  //     });
   //   }
   // }
-//------------------------------------------------------------------------
-// void uploadImage(Uint8List imageData) async {
-//   try {
-//     var request = http.MultipartRequest(
-//       'POST', 
-//       Uri.parse('${apiService.baseUrl}/upload')
-//     );
-
-//     request.files.add(http.MultipartFile.fromBytes(
-//       'file', 
-//       imageData, 
-//       filename: 'image.png', 
-//       contentType: MediaType('image', 'png'),
-//     ));
-
-//     request.fields['allergens'] = selectedAllergens.join(',');
-
-//     var response = await request.send();
-
-//     if (response.statusCode == 200) {
-//       final responseData = await http.Response.fromStream(response);
-//       print("Response body: ${responseData.body}");
-//       // Handle successful response
-//     } else {
-//       print("Failed to upload image: ${response.statusCode}");
-//     }
-//   } catch (e) {
-//     print('Error uploading image: $e');
-//   }
-// }
-// ---------------------------------------------------------------------------
 
 void uploadImage(Uint8List imageData) async {
   try {
@@ -270,7 +229,7 @@ void uploadImage(Uint8List imageData) async {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
