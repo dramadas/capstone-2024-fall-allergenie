@@ -56,7 +56,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
   }
 
   // Step 2: Image Upload
-  void pickImage() {
+  // void pickImage() {
+  void pickImage(ImageSource source){
     if (kIsWeb) {
       html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
       uploadInput.accept = 'image/*';
@@ -77,7 +78,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
       });
     } else {
       final picker = ImagePicker();
-      picker.pickImage(source: ImageSource.gallery).then((pickedFile) {
+      // picker.pickImage(source: ImageSource.gallery).then((pickedFile) {
+      picker.pickImage(source: source).then((pickedFile) { // remove if it doesnt work
         setState(() {
           if (pickedFile != null) {
             pickedFile.readAsBytes().then((bytes) {
@@ -210,6 +212,39 @@ void uploadImage(Uint8List imageData) async {
     });
   }
 
+  void _showImageSourceDialog() { // remove all of this if this doesnt work
+  // Show dialog to choose between camera or gallery
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Select Image Source'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.camera_alt),
+              title: Text('Camera'),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.camera); // Capture image from camera
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo),
+              title: Text('Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage(ImageSource.gallery); // Pick image from gallery
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -298,14 +333,23 @@ void uploadImage(Uint8List imageData) async {
                     child: Icon(Icons.image, size: 100, color: Colors.grey),
                   ),
             SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: pickImage,
+            ElevatedButton.icon( // remove this if it doesnt work
+              onPressed: _showImageSourceDialog, // Open dialog to choose between camera and gallery
               icon: Icon(Icons.upload, size: 24),
-              label: Text('Select Barcode Image', style: TextStyle(fontSize: 18)),
+              label: Text('Select Image', style: TextStyle(fontSize: 18)),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
             ),
+            
+            // ElevatedButton.icon(
+            //   onPressed: pickImage,
+            //   icon: Icon(Icons.upload, size: 24),
+            //   label: Text('Select Barcode Image', style: TextStyle(fontSize: 18)),
+            //   style: ElevatedButton.styleFrom(
+            //     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            //   ),
+            // ),
             SizedBox(height: 40),
 
             // Submit button to check for allergens
