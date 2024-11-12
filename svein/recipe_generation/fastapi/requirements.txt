@@ -1,0 +1,8 @@
+boto3
+faiss-cpu
+fastapi
+langchain
+langchain_community
+langchain_core
+pandas
+pydantic

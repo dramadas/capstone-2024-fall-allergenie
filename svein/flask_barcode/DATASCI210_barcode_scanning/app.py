@@ -14,20 +14,35 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Load OpenFoodFacts local data
-# df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx') ## USE THIS FOR LOCAL TESTING
-df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
+df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx') ## USE THIS FOR LOCAL TESTING
+# df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
 
 df_us['code'] = df_us['code'].apply(lambda x: '{:.0f}'.format(x))
 
+allergy_dict= {"milk": ["butter","caseinates", "cheese", "cream", "custard","pudding", "ghee", "hydrolysates", "lactalbumin", "lactoglobulin", "lactoferrin", "lactose","lactulose", "milk", "nisin", "nougat", "recaldent", "casein","whey", "yogurt", "caramel", "chocolate", "lactose", "sausages", "margarine", "simplesse"]
+               ,"egg":  ["egg", "albumin","globulin", "livetin", "lysozyme", "mayonnaise", "meringue", "ovalbumin", "ovomucin", "ovomucoid", "ovovitellin", "surimi", "lecithin","macaroni", "marzipan", "marshmallows", "nougat", "pasta", "cake icing", "frosting","eggshells", "soup stocks", "consommés", "bouillons", "coffees"]
+               ,"fish": ["fish", "anchovies", "bass", "catfish", "cod", "flounder", "grouper", "haddock", "hake", "halibut", "herring", "mahi","perch", "pike", "pollock", "salmon", "scrod", "sole", "snapper", "swordfish", "tilapia", "trout", "tuna", "snapper", "swordfish","bouillabaisse", "caesar","caponata",  "shellfish", "worcestershire "]
+               ,"shellfish": ["shellfish", "abalone", "barnacle", "krill", "clams", "cherrystone", "littleneck", "pismo", "quahog", "crab", "crawfish", "crayfish", "écrevisse","crawdad", "lobster", "langouste", "langoustine", "scampi", "coral", "tomalley", "mollusks", "Mussels", "squid", "calamari", "snail", "escargot","oysters", 
+                              "octopus", "scallops", "shrimp", "prawns", "crevette", "bouillabaisse", "cuttlefish", "glucosamine", "surimi"]
+                ,'treenut': ["treenut", "almonds", "beechnuts", "butternuts", "cashews", "chestnuts", "coconut", "filberts", "hazelnuts","gingko", "hickory", "lychee", "macadamia", "pecans", "pine", "pignolia", "pistachios","walnuts", "caponata", "gianduja", "marzipan paste", "almond paste", "natural nut extract", "nougat", "artificial nuts",
+                             "nut", "cashew", "almond", "hazelnut", "almond","pesto", "praline"]
+                ,'peanut': ["peatnut", "nuts", "cereal", "chili",  "crackers", "flavoring", "hydrolyzed", "marzipan", "nougat"]
+                ,'wheat': ["wheat", "bran", "bread", "bulgur", "cereal", "couscous", "cracker", "durum", "einkorn", "emmer", "farina","flour", "matzoh",  "pasta", "seitan", "semolina", "spelt", "gluten", "germ", "gluten", "grass", "malt", "sprouted", "starch", "starch","gum", "hydrolyzed", "kamut", "flavoring", "soy", "starch", "surimi"]
+                ,'soy':["soy", "hydrolyzed", "miso", "edamame", "natto", "shoyu", "tamari", "tempeh","tvp","tofu", "flavoring", "vitamin-e"]
+}
+
 def is_safe_to_consume(matched_products, selected_allergens):
     unsafe_allergens = []
-    if selected_allergens == ['']:
+    print (selected_allergens)
+    if selected_allergens == [''] or selected_allergens == []:
         return "No Allergens Selected. Product is Safe to Consume."
     
     for allergen in selected_allergens:
-        # Check if the allergen is present in the matched products
-        if matched_products['allergens'].str.contains(allergen, na=False).any():
-            unsafe_allergens.append(allergen)
+        for allergy in allergy_dict[allergen]:
+            # Check if the allergen is present in the matched products
+            if matched_products['allergens'].str.contains(allergy, na=False).any():
+                unsafe_allergens.append(allergen)
+                break
 
     if unsafe_allergens:
         return f"Not Safe to Consume (contains: {', '.join(unsafe_allergens)})"
@@ -73,8 +88,7 @@ def upload_file():
                 # selected_allergens = request.form.getlist('allergens[]')
                 print ("Selected Allergens",selected_allergens)
                 print("Type",type(selected_allergens))
-                print (selected_allergens[0])
-                selected_allergens = selected_allergens[0].split(',')
+                # selected_allergens = selected_allergens[0].split(',')
                 print(selected_allergens)
                 # print(f"Selected Allergens: {selected_allergens}")
 
