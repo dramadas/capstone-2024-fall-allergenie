@@ -219,11 +219,7 @@ void uploadImage(Uint8List imageData) async {
                 children: [
                   Text(
                     'Welcome to AllerGenie!',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  Text(
-                    'This is your place for real-time allergen detection.',
-                    style: TextStyle(color: Colors.white70, fontSize: 14), 
+                    style: TextStyle(color: Color.fromARGB(237, 209, 172, 24)),
                   ),
                 ],
               ),
@@ -300,6 +296,7 @@ void uploadImage(Uint8List imageData) async {
               icon: Icon(Icons.upload, size: 24),
               label: Text('Select Image', style: TextStyle(fontSize: 18)),
               style: ElevatedButton.styleFrom(
+                foregroundColor: Color.fromARGB(238, 39, 60, 2),
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
             ),
@@ -322,42 +319,60 @@ void uploadImage(Uint8List imageData) async {
               icon: Icon(Icons.check_circle, size: 24),
               label: Text('Check for Allergens', style: TextStyle(fontSize: 18)),
               style: ElevatedButton.styleFrom(
+                foregroundColor: Color.fromARGB(238, 39, 60, 2),
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
             ),
             SizedBox(height: 30), // Space between buttons
-            ElevatedButton(
-              onPressed: () {
-                // Go back to Home Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchRecipePage())
-                );
-              },
-              child: Text('Try the Recipe Generator!'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle: TextStyle(fontSize: 18),
-              ),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                // Go back to Home Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage())
-                );
-              },
-              child: Text('Go Back to Home Page'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                textStyle: TextStyle(fontSize: 18),
-              ),
-            ),
+          Image.asset(
+                  'assets/images/RecipeGeneration.png',
+                  height: 300,),
+
           ],
         ),
       ),
+bottomNavigationBar: BottomAppBar(
+    color: const Color.fromARGB(238, 39, 60, 2),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+         IconButton(
+          icon:Icon(Icons.photo_camera) ,
+          color: Color.fromARGB(237, 209, 172, 24),
+          onPressed: () {
+                // Action for the first button
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UploadImagePage()),
+                );
+  },),
+        IconButton(
+          icon:Icon(Icons.home) ,
+          color: Color.fromARGB(237, 209, 172, 24),
+          onPressed: () {
+                // Action for the first button
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+  },),
+        IconButton(
+          icon:Icon(Icons.search) ,
+          color: Color.fromARGB(237, 209, 172, 24),
+          onPressed: () {
+                // Action for the first button
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchRecipe()),
+                );
+  },),
+      
+        ],
+      )
+      )
+  ),
     );
   }
 }

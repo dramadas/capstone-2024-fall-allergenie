@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart'; //remove later
 import 'api_service.dart';
 import 'result_page.dart'; 
+import 'home_page.dart';
 
 class UploadImagePage extends StatefulWidget {
   @override
@@ -208,7 +209,7 @@ void uploadImage(Uint8List imageData) async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 95, 8, 110),
+        backgroundColor: const Color.fromARGB(233, 2, 56, 8),
         title: Row(
           children: [
             Expanded(
@@ -229,6 +230,7 @@ void uploadImage(Uint8List imageData) async {
           ],
         ),
       ),
+      backgroundColor: Color.fromARGB(255, 246, 243, 226),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -237,7 +239,7 @@ void uploadImage(Uint8List imageData) async {
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Center(
                 child: Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/GreenLogo.png',
                   height: 100, 
                 ),
               ),
@@ -320,6 +322,21 @@ void uploadImage(Uint8List imageData) async {
               label: Text('Check for Allergens', style: TextStyle(fontSize: 18)),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+            ),
+            SizedBox(height: 30), // Space between buttons
+            ElevatedButton(
+              onPressed: () {
+                // Go back to Home Page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage())
+                );
+              },
+              child: Text('Go Back to Home Page'),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: TextStyle(fontSize: 18),
               ),
             ),
           ],
