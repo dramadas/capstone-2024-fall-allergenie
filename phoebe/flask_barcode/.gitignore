@@ -1,0 +1,5 @@
+.venv/
+venv/
+DATASCI210_barcode_scanning/openfoodfacts_us.xlsx
+DATASCI210_barcode_scanning/FlaskApp-KP.pem
+DATASCI210_barcode_scanning/FlaskApp-KP.ppk
