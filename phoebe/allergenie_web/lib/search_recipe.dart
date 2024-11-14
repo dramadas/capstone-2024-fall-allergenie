@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home_page.dart';
+import 'upload_image_page.dart'; // Add import for the UploadImagePage
 import '../rag_model/recipe_request.dart';
 import '../api_service_recipe_generator.dart';
 
@@ -8,36 +9,26 @@ class SearchRecipePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: SearchRecipe(),
     );
   }
 }
 
 class SearchRecipe extends StatefulWidget {
   @override
-  _AllergyRecipePageState createState() => _AllergyRecipePageState();
+  _SearchRecipeState createState() => _SearchRecipeState();
 }
 
-class _AllergyRecipePageState extends State<SearchRecipe> {
+class _SearchRecipeState extends State<SearchRecipe> {
   final TextEditingController _dishTypeController = TextEditingController();
   final ApiServiceRAG _apiService = ApiServiceRAG();
   String _recipe = "";
   bool _isLoading = false;
   bool _showDialog = false;
 
-  // List to hold selected allergens
   List<String> selectedAllergies = [];
-
-  // List of available allergy options
   final List<String> allergyOptions = [
-    'milk',
-    'egg',
-    'fish',
-    'shellfish',
-    'treenut',
-    'peanut',
-    'wheat',
-    'soy',
+    'milk', 'egg', 'fish', 'shellfish', 'treenut', 'peanut', 'wheat', 'soy',
   ];
 
   Future<void> _getRecipe() async {
@@ -52,7 +43,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
       _isLoading = true;
     });
 
-    // Combine selected allergies into a single string for the request
     final request = RecipeRequest(
       allergy: selectedAllergies.join(', '),
       dish_type: _dishTypeController.text,
@@ -67,18 +57,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
     });
   }
 
-  // Function to handle selection of allergies
-  void _onAllergySelected(String allergy) {
-    setState(() {
-      if (selectedAllergies.contains(allergy)) {
-        selectedAllergies.remove(allergy);
-      } else {
-        selectedAllergies.add(allergy);
-      }
-    });
-  }
-
-  // Disclaimer Banner
   Widget _buildDisclaimerBanner() {
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -118,7 +96,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
                 ),
               ),
               const SizedBox(height: 16),
-
               // Question Banner
               Text(
                 "AllerGenie Recipe Generator",
@@ -130,7 +107,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-
               // Allergy multi-select dropdown
               Text(
                 'Step 1: Select any allergies you have',
@@ -173,7 +149,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
                   },
                 ),
               ),
-
               const SizedBox(height: 16),
               Text(
                 'Step 2: Enter the meal/cuisine type you wish to prepare:',
@@ -202,7 +177,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
                   fillColor: Color.fromARGB(255, 246, 243, 226),
                 ),
               ),
-
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _getRecipe,
@@ -223,8 +197,6 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
                   ),
                 ),
               ),
-
-              // Spinner Animation
               const SizedBox(height: 20),
               _isLoading
                   ? Center(
@@ -301,6 +273,37 @@ class _AllergyRecipePageState extends State<SearchRecipe> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        color: const Color.fromARGB(238, 39, 60, 2),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                icon: Icon(Icons.photo_camera),
+                color: Color.fromARGB(237, 209, 172, 24),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UploadImagePage()),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.home),
+                color: Color.fromARGB(237, 209, 172, 24),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -330,13 +333,27 @@ class _MultiSelectDialogState extends State<MultiSelectDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Select Allergies'),
+      title: Text(
+        'Select Allergies',
+        style: GoogleFonts.montserrat(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(238, 39, 60, 2),
+        ),
+      ),
       content: SingleChildScrollView(
         child: Column(
           children: widget.options.map((option) {
             return CheckboxListTile(
-              title: Text(option),
+              title: Text(
+                option,
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  color: Color.fromARGB(238, 39, 60, 2),
+                ),
+              ),
               value: selected.contains(option),
+              activeColor: Color.fromARGB(238, 39, 60, 2),
               onChanged: (bool? value) {
                 setState(() {
                   if (value != null && value) {
@@ -355,10 +372,16 @@ class _MultiSelectDialogState extends State<MultiSelectDialog> {
           onPressed: () {
             Navigator.pop(context, selected);
           },
-          child: Text('Done'),
+          child: Text(
+            'Done',
+            style: GoogleFonts.montserrat(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(238, 39, 60, 2), // Green color
+            ),
+          ),
         ),
       ],
     );
   }
 }
-
