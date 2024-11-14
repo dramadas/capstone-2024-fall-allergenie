@@ -1,7 +1,6 @@
 import 'package:datasci_barcode_scanning/search_recipe.dart';
 import 'package:flutter/material.dart';
 import 'upload_image_page.dart';
-import 'recipe_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -33,13 +32,13 @@ class HomePage extends StatelessWidget {
         style: GoogleFonts.montserrat(
           color: Color.fromARGB(237, 209, 172, 24),
           fontSize: 24,
-        ),), 
+        ),),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(238, 39, 60, 2),
       ),
       backgroundColor: Color.fromARGB(255, 246, 243, 226),
       body: GestureDetector(
-        onTap: () => void_showDisclaimerDialog(context), // show dialog on tap 
+        onTap: () => void_showDisclaimerDialog(context), // show dialog on tap
       child: Stack(
         children:[
           // main content of the home page
@@ -56,7 +55,7 @@ class HomePage extends StatelessWidget {
                 fontSize: 75,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(238, 39, 60, 2)
-              ) , 
+              ) ,
             ),
             Center(
             child: Image.asset(
@@ -87,7 +86,7 @@ class HomePage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(245, 216, 176, 14),),
                       textAlign: TextAlign.left,)
-                      
+
                       )
             ),
              Padding(
@@ -103,8 +102,8 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // First Column: 
-                Expanded( 
+                // First Column:
+                Expanded(
                   child: Column(
                     children: [
                     SizedBox(height: 50),
@@ -129,7 +128,7 @@ class HomePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => UploadImagePage()),
                 );
-                
+
               },
               child: Text('Allergy Detection'),
               style: ElevatedButton.styleFrom(
@@ -138,11 +137,11 @@ class HomePage extends StatelessWidget {
                 textStyle: GoogleFonts.montserrat(fontSize: 18),
               ),
             ),
-                  ],)  
-               
+                  ],)
+
             ),
-                
-                Expanded( 
+
+                Expanded(
                   child: Column(
                     children: [
                     SizedBox(height: 50),
@@ -178,12 +177,12 @@ class HomePage extends StatelessWidget {
               ),
             ),
             SizedBox(height:30),
-                  ],)    
+                  ],)
             ),
               ]
             )
           ],
-            
+
         ),
       ),
     ),
@@ -227,7 +226,6 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => SearchRecipe()),
                 );
   },),
-      
         ],
       )
       )
