@@ -23,16 +23,9 @@ class _UploadImagePageState extends State<UploadImagePage> {
 
   // List of allergens
   List<String> allergens = [
-    'milk',
-    'gluten',
-    'nuts',
-    'soybeans',
-    'peanuts',
-    'celery',
-    'crustaceans',
-    'mustard',
-    'sesame-seeds'
+    'milk', 'egg', 'fish', 'shellfish', 'treenut', 'peanut', 'wheat', 'soy',
   ];
+  
   List<String> selectedAllergens = []; // Selected allergens
 
   // Step 1: Allergen Selection
