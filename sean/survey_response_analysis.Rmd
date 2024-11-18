@@ -1,0 +1,250 @@
+---
+title: "MIDS W210 Experiment"
+subtitle: "Analyzing A.I. Image Models & Prompts"
+author: "AllerGenie Team"
+output: bookdown::pdf_document2
+toc: false
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(data.table)
+library(dplyr)
+library(stargazer)
+library(ggplot2)
+library(gridExtra)
+library(sandwich)
+library(lmtest)
+library(tidyverse)
+```
+
+
+```{r setup, include=FALSE}
+d <- data.table::fread(
+  input = 'Survey_responses_genAI_formatted.csv')
+```
+
+```{r}
+summary(d)
+```
+```{r}
+d %>%
+  select(Model, Score) %>%
+  group_by(Model) %>%
+  summarise(average_score = mean(Score))
+```
+
+```{r}
+d %>%
+  select(Prompt, Score) %>%
+  group_by(Prompt) %>%
+  summarise(average_score = mean(Score))
+```
+```{r}
+#Create a Model for Each
+model_baseline <- lm(Score ~ Model, data = d)
+model_prompt <- lm(Score ~ Model + Prompt, data = d)
+model_interaction <- lm(Score ~ Model + Prompt + Model:Prompt, data = d)
+
+#Clustered Standard Errors
+robust_se_baseline <- sqrt(diag(vcovCL(model_baseline, cluser = ~ID, type = "HC")))
+robust_se_prompt <- sqrt(diag(vcovCL(model_prompt, cluser = ~ID, type = "HC")))
+robust_se_interaction <- sqrt(diag(vcovCL(model_interaction, cluser = ~ID, type = "HC")))
+
+#Create simple stargazer
+stargazer(model_baseline, model_prompt, model_interaction,
+          se = list(robust_se_baseline, robust_se_prompt, robust_se_interaction),
+          type = "text")
+```
+
+```{r, fig.width=12, fig.height=10, include=TRUE}
+plot_1 <- ggplot(d, aes(x=Model, y=as.numeric(Score))) + geom_boxplot() +
+  theme(
+  plot.title = element_text(color = "#355E3B",
+                            size = 14,
+                            face = "bold"),
+  plot.subtitle = element_text(color="#969696",
+                               size = 12,
+                               face = "italic"),
+  axis.title = element_text(color = "#969696",
+                            size = 12,
+                            face = "bold"),
+  axis.text = element_text(color = "#969696", size = 10),
+  axis.text.x = element_text(),
+  axis.line = element_line(color = "#969696"),
+  axis.ticks = element_line(color = "#969696")) +
+  labs(
+    title = "Boxplot of User Scores",
+    subtitle = "Split by Model",
+    x = "Model",
+    y = "Score")
+
+plot_2 <- ggplot(d, aes(x=Prompt, y=as.numeric(Score))) + geom_boxplot() +
+  theme(
+  plot.title = element_text(color = "#355E3B",
+                            size = 14,
+                            face = "bold"),
+  plot.subtitle = element_text(color="#969696",
+                               size = 12,
+                               face = "italic"),
+  axis.title = element_text(color = "#969696",
+                            size = 12,
+                            face = "bold"),
+  axis.text = element_text(color = "#969696", size = 10),
+  axis.text.x = element_text(),
+  axis.line = element_line(color = "#969696"),
+  axis.ticks = element_line(color = "#969696")) +
+  labs(
+    title = "Boxplot of User Scores",
+    subtitle = "Split by Prompt",
+    x = "Prompt",
+    y = "Score")
+
+
+d$Combination <- paste(d$Model," ",d$Prompt)
+
+plot_3 <- ggplot(d, aes(x=Combination, y=as.numeric(Score))) + geom_boxplot() +
+  theme(
+  plot.title = element_text(color = "#355E3B",
+                            size = 14,
+                            face = "bold"),
+  plot.subtitle = element_text(color="#969696",
+                               size = 12,
+                               face = "italic"),
+  axis.title = element_text(color = "#969696",
+                            size = 12,
+                            face = "bold"),
+  axis.text = element_text(color = "#969696", size = 10),
+  axis.text.x = element_text(),
+  axis.line = element_line(color = "#969696"),
+  axis.ticks = element_line(color = "#969696")) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  labs(
+    title = "Boxplot of User Scores",
+    subtitle = "Split by Model and Prompt",
+    x = "Model & Prompt",
+    y = "Score")
+
+
+plot_4 <- ggplot(d, aes(x=Food, y=as.numeric(Score))) + geom_boxplot() +
+  theme(
+  plot.title = element_text(color = "#355E3B",
+                            size = 14,
+                            face = "bold"),
+  plot.subtitle = element_text(color="#969696",
+                               size = 12,
+                               face = "italic"),
+  axis.title = element_text(color = "#969696",
+                            size = 12,
+                            face = "bold"),
+  axis.text = element_text(color = "#969696", size = 10),
+  axis.text.x = element_text(),
+  axis.line = element_line(color = "#969696"),
+  axis.ticks = element_line(color = "#969696")) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  labs(
+    title = "Boxplot of User Scores",
+    subtitle = "Split by Food",
+    x = "Food",
+    y = "Score")
+
+grid.arrange(plot_1, plot_2, plot_3, plot_4, nrow = 2)
+```
+
+```{r}
+plot_4
+```
+
+
+```{r}
+mean_value_A <- d %>%
+  filter(Model == "Model 2.1") %>%
+  summarise(mean_value = mean(Score))
+
+mean_value_B <- d %>%
+  filter(Model == "Model 1.5") %>%
+  summarise(mean_value = mean(Score))
+
+sd_value_A <- d %>%
+  filter(Model == "Model 2.1") %>%
+  summarise(mean_value = sd(Score))
+
+sd_value_B <- d %>%
+  filter(Model == "Model 1.5") %>%
+  summarise(mean_value = sd(Score))
+
+#Power Analysis Function
+power_test_t <- function(
+  mean_control = mean_value_A, 
+  mean_treat = mean_value_B, 
+  sd_control = sd_value_A, 
+  sd_treat = sd_value_B,
+  number_per_condition = 40, 
+  power_loops = 100, 
+  ri_loops = 100, 
+  verbose = TRUE) { 
+
+    p_values <- NA   
+    ri <- NA 
+    d <- data.table()
+  
+    d[ , condition := rep(c('control', 'treatment'), each = number_per_condition)]  
+  
+    for(power_loop in 1:power_loops) { 
+      if(verbose == TRUE) {
+        if(power_loop %% 10 == 0) {
+          cat(sprintf('Loop Number: %.0f\n', power_loop))
+        }
+      } 
+      
+      p_values[power_loop] <- t.test(
+        x = rnorm(number_per_condition, mean = mean_control, sd = sd_control), 
+        y = rnorm(number_per_condition, mean = mean_treat, sd = sd_treat)
+      )$p.value
+    }
+      
+    return(list(
+      'p_values' = p_values, 
+      'power' = mean(p_values < 0.05) #95% confidence
+      ))
+}
+
+#Power Analysis 
+set.seed(0)
+samples_per_condition <- seq(10, 200, 2)
+size_power <- NA 
+
+for(i in 1:length(samples_per_condition)) { 
+  size_power[i] <- power_test_t(
+    mean_control = 107, mean_treat = 100, 
+    sd_control = 19, sd_treat = 16,
+    power_loops = 1000, verbose = FALSE,
+    number_per_condition = samples_per_condition[i]
+    )$power
+}
+
+d_1 <- data.table(size_power, samples_per_condition)
+
+ggplot(d_1, aes(x = samples_per_condition, y = size_power)) + geom_line() +
+  theme(
+  plot.title = element_text(color = "#355E3B",
+                            size = 14,
+                            face = "bold"),
+  plot.subtitle = element_text(color="#969696",
+                               size = 12,
+                               face = "italic"),
+  axis.title = element_text(color = "#969696",
+                            size = 12,
+                            face = "bold"),
+  axis.text = element_text(color = "#969696", size = 10),
+  axis.text.x = element_text(angle = 90),
+  axis.line = element_line(color = "#969696"),
+  axis.ticks = element_line(color = "#969696")) +
+  labs(
+    title = "Power Analysis",
+    subtitle = "Model 2.1 vs. Model 1.5",
+    x = "Samples Per Condition",
+    y = "Size Power")
+```
+
