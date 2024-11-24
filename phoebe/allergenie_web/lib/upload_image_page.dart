@@ -220,7 +220,7 @@ void uploadImage(Uint8List imageData) async {
           ],
         ),
       ),
-      backgroundColor: Color.fromARGB(255, 246, 243, 226),
+      backgroundColor: Color.fromARGB(255, 251, 247, 228),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(

@@ -133,7 +133,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: Color.fromARGB(255, 246, 243, 226),
+    backgroundColor: Color.fromARGB(255, 251, 247, 228),
     body: SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),

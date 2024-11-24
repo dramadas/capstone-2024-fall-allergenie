@@ -24,9 +24,17 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/logo.png
     - assets/images/GreenLogo.png
     - assets/images/GroceryItems.png
-    - assets/images/RecipeGeneration.png
     - assets/images/Ingredients.png
+    - assets/images/logo.png
     - assets/images/Recipe.png
+    - assets/images/RecipeGeneration.png
+    - assets/images/agnese.png
+    - assets/images/dhyuti.jpg
+    - assets/images/phoebe.jpg
+    - assets/images/rita.png
+    - assets/images/Sean.png
+    - assets/images/Subha.jpg
+    - assets/images/Svein.JPG
+

@@ -43,7 +43,7 @@ class RecipePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(238, 39, 60, 2),
       ),
-      backgroundColor: Color.fromARGB(255, 246, 243, 226),
+      backgroundColor: Color.fromARGB(255, 251, 247, 228),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Center(
