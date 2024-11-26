@@ -26,6 +26,7 @@ flutter:
   assets:
     - assets/images/GreenLogo.png
     - assets/images/GroceryItems.png
+    - assets/images/AllergyDetection.png
     - assets/images/Ingredients.png
     - assets/images/logo.png
     - assets/images/Recipe.png

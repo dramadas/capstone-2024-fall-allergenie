@@ -51,8 +51,9 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 20),
             Text(
               "Welcome to AllerGenie!",
+              textAlign: TextAlign.center,
               style: GoogleFonts.montserrat(
-                fontSize: 75,
+                fontSize: 60,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(238, 39, 60, 2)
               ) ,
@@ -73,15 +74,17 @@ class HomePage extends StatelessWidget {
                     children: [
                     SizedBox(height: 50),
                     Image.asset(
-                  'assets/images/GroceryItems.png',
+                  'assets/images/AllergyDetection.png',
                   height: 300,),
                     SizedBox(height: 20),
                     Text("Check for Allergens in Your Favorite Foods!",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(
-                      fontSize: 35,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(238, 39, 60, 2),)),
                     Text("Click below to snap or upload an image of a food barcode to find out!",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(
                       fontSize: 20,
                       color: Color.fromARGB(237, 13, 1, 3),)),
@@ -117,12 +120,14 @@ class HomePage extends StatelessWidget {
                       height: 300,),
                     SizedBox(height: 20),
                     Text("Hungry for an Allergy Friendly Meal?",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(
-                      fontSize: 35,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(238, 39, 60, 2),
                     )),
                     Text("Search below to find the next best recipe that fits your dietary restrictions!",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.montserrat(
                       fontSize: 20,
                       color: Color.fromARGB(237, 13, 1, 3),
@@ -165,7 +170,7 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Center(
-                child: Text("Our Mission: ",
+                child: Text("Our Mission",
                       style: GoogleFonts.montserrat(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -301,7 +306,7 @@ class HomePage extends StatelessWidget {
                SizedBox(
                 width: 200,
                 height: 50,
-                child: Text("Phoebe Yeuh",
+                child: Text("Phoebe Yueh",
               style: GoogleFonts.montserrat(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
