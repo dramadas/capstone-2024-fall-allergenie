@@ -3,6 +3,7 @@ from flask_cors import CORS
 from PIL import Image
 from pyzbar.pyzbar import decode
 import os
+import cv2
 import pandas as pd
 from tabulate import tabulate
 
@@ -14,8 +15,8 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Load OpenFoodFacts local data
-df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx') ## USE THIS FOR LOCAL TESTING
-# df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
+#df_us = pd.read_excel('DATASCI210_barcode_scanning/openfoodfacts_us.xlsx') ## USE THIS FOR LOCAL TESTING
+df_us = pd.read_excel('/home/ec2-user/openfoodfacts_us.xlsx')
 
 df_us['code'] = df_us['code'].apply(lambda x: '{:.0f}'.format(x))
 
@@ -33,11 +34,10 @@ allergy_dict= {"milk": ["butter","caseinates", "cheese", "cream", "custard","pud
 
 def is_safe_to_consume(matched_products, selected_allergens):
     unsafe_allergens = []
-    print (selected_allergens)
     if selected_allergens == [''] or selected_allergens == []:
         return "No Allergens Selected. Product is Safe to Consume."
     
-    for allergen in selected_allergens:
+    for allergen in selected_allergens[0].split(','):
         for allergy in allergy_dict[allergen]:
             # Check if the allergen is present in the matched products
             if matched_products['allergens'].str.contains(allergy, na=False).any():
@@ -67,8 +67,13 @@ def upload_file():
         file.save(file_path)
 
         # Decoding barcode
-        image = Image.open(file_path)
-        decoded_barcode = decode(image)
+##        image = Image.open(file_path)
+##        decoded_barcode = decode(image)
+        image  = cv2.imread(file_path)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        decoded_barcode = decode(gray)
+        print(decoded_barcode[0].data.decode('utf-8'))
+
 
         if decoded_barcode:
             decoded_barcode_value = decoded_barcode[0].data.decode('utf-8')
@@ -87,10 +92,7 @@ def upload_file():
                 selected_allergens = request.form.getlist('allergens')
                 # selected_allergens = request.form.getlist('allergens[]')
                 print ("Selected Allergens",selected_allergens)
-                print("Type",type(selected_allergens))
-                # selected_allergens = selected_allergens[0].split(',')
-                print(selected_allergens)
-                # print(f"Selected Allergens: {selected_allergens}")
+
 
                 # Check if users can consume the product
                 safety_status = is_safe_to_consume(matched_products, selected_allergens)

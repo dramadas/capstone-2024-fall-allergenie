@@ -5,3 +5,4 @@ pyzbar
 pandas
 tabulate
 openpyxl
+opencv-python
