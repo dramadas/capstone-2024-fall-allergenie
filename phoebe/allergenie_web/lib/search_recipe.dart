@@ -200,7 +200,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 },
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
             const Text(
               'Note:',
               style: TextStyle(
@@ -316,6 +316,29 @@ class _SearchRecipeState extends State<SearchRecipe> {
                 ),
                 filled: true,
                 fillColor: Color.fromARGB(255, 246, 243, 226),
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Note: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(238, 39, 60, 2),
+                      fontSize: 14,
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'Enter a cuisine like "French" or "Italian", or a meal type like "Desserts" or "Breakfast". Be specific and creative!',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Color.fromARGB(238, 39, 60, 2),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
@@ -625,4 +648,3 @@ class _MultiSelectDialogState extends State<MultiSelectDialog> {
     );
   }
 }
-
