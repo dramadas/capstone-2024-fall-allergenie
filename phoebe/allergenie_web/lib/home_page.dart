@@ -209,13 +209,13 @@ class HomePage extends StatelessWidget {
               children: [Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-              Image.asset('images/Svein.JPG', width: 200, height: 200),
+              Image.asset('assets/images/Svein.JPG', width: 200, height: 200),
  
-              Image.asset('images/Sean.png', width: 200, height: 200), 
+              Image.asset('assets/images/Sean.png', width: 200, height: 200), 
 
-              Image.asset('images/agnese.png', width: 200, height: 200), 
+              Image.asset('assets/images/agnese.png', width: 200, height: 200), 
 
-              Image.asset('images/Subha.jpg', width: 200, height: 200), 
+              Image.asset('assets/images/Subha.jpg', width: 200, height: 200), 
  
               ]
             ),
@@ -271,11 +271,11 @@ class HomePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-              Image.asset('images/dhyuti.jpg', width: 200, height: 200),
+              Image.asset('assets/images/dhyuti.jpg', width: 200, height: 200),
 
-              Image.asset('images/rita.png', width: 200, height: 200), 
+              Image.asset('assets/images/rita.png', width: 200, height: 200), 
 
-              Image.asset('images/phoebe.jpg', width: 200, height: 200), 
+              Image.asset('assets/images/phoebe.jpg', width: 200, height: 200), 
               ]
             ),
             Row(
