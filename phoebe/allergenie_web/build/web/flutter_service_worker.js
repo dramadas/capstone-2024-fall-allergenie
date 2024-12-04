@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "23580b7baf39fb9c91de4a03a168db1f",
+const RESOURCES = {"flutter_bootstrap.js": "1b09ba1cc1054b87bdd0c62cac9605da",
 "version.json": "87558cb5a6cb791fd42a382159927876",
 "index.html": "ecbb0ef535c4fea98e75f6e99fb022e2",
 "/": "ecbb0ef535c4fea98e75f6e99fb022e2",
@@ -19,10 +19,10 @@ const RESOURCES = {"flutter_bootstrap.js": "23580b7baf39fb9c91de4a03a168db1f",
 "assets/NOTICES": "af1672eb3391fc50a027b38c79ebe4b1",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/AssetManifest.bin.json": "9e237e17911893c33600403e89f75741",
-"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "e986ebe42ef785b27164c36a9abc7818",
+"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "b93248a553f9e8bc17f1065929d5934b",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
 "assets/AssetManifest.bin": "17b800d64a02c0e10d7edf0feb0101fc",
-"assets/fonts/MaterialIcons-Regular.otf": "f559eb58e768662626bd5b065ab065a4",
+"assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080",
 "assets/assets/images/phoebe.jpg": "f3c4700208008eb7f723bfa5abc43432",
 "assets/assets/images/agnese.png": "50d7a811637f140ea2490cf6de65c80d",
 "assets/assets/images/rita.png": "3cd59fd3387134ce670a5b450b7278ca",
